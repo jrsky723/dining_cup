@@ -1,22 +1,17 @@
+import 'package:dining_cup/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const App());
+  runApp(const DiningCupApp());
 }
 
-class App extends StatelessWidget {
-  const App({super.key});
+class DiningCupApp extends StatelessWidget {
+  const DiningCupApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          appBar: AppBar(
-            title: const Text("Hello flutter!"),
-          ),
-          body: const Center(
-            child: Text("Hello World"),
-          )),
+    return const MaterialApp(
+      home: HomeScreen(),
     );
   }
 }
