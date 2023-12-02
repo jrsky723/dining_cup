@@ -7,6 +7,7 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 class NaverMapApi {
   static const String _BASE_URL = 'naveropenapi.apigw.ntruss.com';
   static const String _REVERSE_GEOCODE_PATH = '/map-reversegeocode/v2/gc';
+  static const String _GEOCODE_PATH = '/map-geocode/v2/geocode';
 
   static Future<void> init() async {
     await NaverMapSdk.instance.initialize(
@@ -58,5 +59,37 @@ class NaverMapApi {
       log('reverseGeocode failed: $e');
     }
     return '';
+  }
+
+  static Future<NLatLng?> geocode(String query, NLatLng latLng) async {
+    final queryParameters = {
+      'query': query,
+      'coordinate': '${latLng.longitude},${latLng.latitude}',
+    };
+    final headers = {
+      'X-NCP-APIGW-API-KEY-ID': dotenv.env['NAVER_MAP_CLIENT_ID']!,
+      'X-NCP-APIGW-API-KEY': dotenv.env['NAVER_MAP_CLIENT_SECRET']!,
+    };
+    final uri = Uri.https(_BASE_URL, _GEOCODE_PATH, queryParameters);
+
+    try {
+      final response = await http.get(uri, headers: headers);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        List addresses = jsonResponse['addresses'];
+
+        if (addresses.isNotEmpty) {
+          var address = addresses.first;
+          var x = double.parse(address['x']);
+          var y = double.parse(address['y']);
+          return NLatLng(y, x);
+        } else {
+          log('geocode failed: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      log('geocode failed: $e');
+    }
+    return null;
   }
 }
