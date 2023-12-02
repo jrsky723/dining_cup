@@ -17,6 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
   NLatLng? _currentPosition;
   String _currentAddress = '';
   final List<int> _distances = [100, 300, 500, 1000, 2000, 3000];
+  final List<double> _zoomLevels = [15.7, 14.2, 13.5, 12.5, 11.5, 10.9];
   int _distanceIndex = 0;
   final Set<NMarker> _markers = {};
   final TextEditingController _addressController = TextEditingController();
@@ -75,22 +76,24 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
+  void _addCircleOverlay() {
+    _controller!.addOverlay(NCircleOverlay(
+      id: 'circle',
+      center: _currentPosition!,
+      radius: _distances[_distanceIndex].toDouble(),
+      color: const Color.fromRGBO(255, 193, 7, 0.3),
+      outlineColor: const Color.fromRGBO(255, 193, 7, 0.7),
+      outlineWidth: 2,
+    ));
+  }
+
   void _updateMapZoomLevel() {
-    double newZoomLevel = calculateZoomLevel(_distances[_distanceIndex]);
+    double newZoomLevel = _zoomLevels[_distanceIndex];
     final cameraUpdate = NCameraUpdate.scrollAndZoomTo(
         target: _currentPosition!, zoom: newZoomLevel);
     _controller!.updateCamera(cameraUpdate);
-  }
-
-  // 거리에 따른 줌 레벨 계산 함수 (이 부분은 경험적으로 조정될 수 있음)
-  double calculateZoomLevel(int distance) {
-    // 예시: 거리에 따른 줌 레벨 계산 로직
-    // 실제 줌 레벨은 프로젝트의 필요에 따라 조정되어야 함
-    if (distance <= 300) return 15.0;
-    if (distance <= 500) return 14.0;
-    if (distance <= 1000) return 13.0;
-    if (distance <= 2000) return 12.0;
-    return 11.0; // 기본값
+    // 원의 반경을 표시하기 위해 원을 그리는 로직을 추가합니다.
+    _addCircleOverlay();
   }
 
   @override
@@ -109,12 +112,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     options: NaverMapViewOptions(
                       initialCameraPosition: NCameraPosition(
                         target: _currentPosition!,
-                        zoom: 16,
+                        zoom: _zoomLevels[_distanceIndex],
                       ),
                     ),
                     onMapReady: (controller) {
                       _controller = controller;
                       _controller!.addOverlayAll(_markers);
+                      _addCircleOverlay();
                     },
                   ),
           ),
