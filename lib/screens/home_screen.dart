@@ -16,7 +16,6 @@ class HomeScreen extends StatelessWidget {
         title: const Text(
           'Dining Cup',
         ),
-        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Center(
         child: Column(
@@ -56,7 +55,6 @@ class HomeScreen extends StatelessWidget {
                         builder: (context) => const SetupScreen()));
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
                 minimumSize: const Size(200.0, 50.0),
               ),
               child: const Text(
