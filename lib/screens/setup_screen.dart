@@ -1,3 +1,4 @@
+import 'package:dining_cup/models/dining_model.dart';
 import 'package:dining_cup/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +12,17 @@ class SetupScreen extends StatefulWidget {
 class _SetupScreenState extends State<SetupScreen> {
   // 위치, 거리, 카테고리, 월드컵 대진 등을 저장할 변수들을 선언합니다.
 
+  List<DiningModel> dinings = []; // 맛집 리스트
+
   String selectedLocation = '현재 위치'; // 현재 위치 또는 임의의 위치
   int selectedDistance = 100; // 거리 (예: 100m, 300m 등)
   // 기타 필요한 변수들 추가...
+
+  @override
+  void initState() {
+    super.initState();
+    print(dinings.length);
+  }
 
   @override
   Widget build(BuildContext context) {

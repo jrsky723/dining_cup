@@ -9,7 +9,7 @@ class KakaoApi {
   static const String _BASE_URL = 'dapi.kakao.com';
   static const String _SEARCH_KEYWORD_PATH = '/v2/local/search/keyword.json';
 
-  static Future<Set<DiningModel>> searchDinings({
+  static Future<List<DiningModel>> searchDinings({
     required String query,
     required double longitude,
     required double latitude,
@@ -55,7 +55,7 @@ class KakaoApi {
         }
       }
     }
-    return dinings;
+    return dinings.toList();
   }
 
   static List<String> createRectangles(
