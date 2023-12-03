@@ -46,7 +46,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _searchDinings() async {
-    List<DiningModel> dinings = await KakaoApi.searchDinings(
+    Set<DiningModel> dinings = await KakaoApi.searchDinings(
       query: _menu,
       longitude: _currentPosition!.longitude,
       latitude: _currentPosition!.latitude,
@@ -189,13 +189,25 @@ class _SearchScreenState extends State<SearchScreen> {
                     _menu = value;
                   },
                 ),
+                Text('식당 갯수: ${_markers.length}'),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: _searchDinings, // 검색 버튼 로직 연결
+                      child: const Text('식당 검색'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('설정 완료'),
+                    ),
+                  ],
+                ),
               ],
             ),
-          ), // 몇 미터 이내의 음식점을 검색할지 설정하는 슬라이더 (100m, 300m, 500m, 1km, 2km, 3km)
-          ElevatedButton(
-            onPressed: _searchDinings, // 검색 버튼 로직 연결
-            child: const Text('식당 검색'),
           ),
+          // 몇 미터 이내의 음식점을 검색할지 설정하는 슬라이더 (100m, 300m, 500m, 1km, 2km, 3km)
         ],
       ),
     );
