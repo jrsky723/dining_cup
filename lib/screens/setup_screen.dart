@@ -1,4 +1,7 @@
+import 'package:dining_cup/constants/gaps.dart';
+import 'package:dining_cup/constants/sizes.dart';
 import 'package:dining_cup/models/dining_model.dart';
+import 'package:dining_cup/screens/game_screen.dart';
 import 'package:dining_cup/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,56 +13,154 @@ class SetupScreen extends StatefulWidget {
 }
 
 class _SetupScreenState extends State<SetupScreen> {
-  // 위치, 거리, 카테고리, 월드컵 대진 등을 저장할 변수들을 선언합니다.
+  List<DiningModel> dinings = [];
+  int selectedWorldCupSize = 0; // 사용자가 선택할 수 있는 월드컵 규모
 
-  List<DiningModel> dinings = []; // 맛집 리스트
+  final List<int> availableSizes = [
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+  ]; // 가능한 월드컵 규모 목록
 
-  String selectedLocation = '현재 위치'; // 현재 위치 또는 임의의 위치
-  int selectedDistance = 100; // 거리 (예: 100m, 300m 등)
-  // 기타 필요한 변수들 추가...
+  List<int> getFilteredSizes() {
+    List<int> filteredSizes =
+        availableSizes.where((size) => size < dinings.length).toList();
+    filteredSizes.add(dinings.length);
+    return filteredSizes;
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<int> filteredSizes = getFilteredSizes();
+
+    if (!filteredSizes.contains(selectedWorldCupSize)) {
+      selectedWorldCupSize = filteredSizes.isNotEmpty ? filteredSizes.first : 0;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('월드컵 대진표 설정'),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
+        padding: const EdgeInsets.all(Sizes.size16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            // 탐색 버튼
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // 탐색 버튼 클릭 시의 로직
-                  var result = Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchScreen()));
-                  result.then((value) {
-                    if (value != null) {
-                      setState(() {
-                        dinings = value;
-                      });
-                    }
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchScreen(),
+                  ),
+                );
+                if (result != null) {
+                  setState(() {
+                    dinings = result;
                   });
-                },
-                child: const Text('식당 탐색'),
+                }
+              },
+              child: const Text('식당 탐색'),
+            ),
+            Gaps.v20,
+            Center(
+              child: Text(
+                '선택된 식당: ${dinings.length}개',
+                style: const TextStyle(
+                  fontSize: Sizes.size20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-
-            // 월드컵 시작 버튼
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // 월드컵 시작 버튼 클릭 시의 로직
-                },
-                child: const Text('월드컵 시작'),
+            Gaps.v20,
+            if (dinings.isEmpty)
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    '식당을 탐색해 주세요.',
+                    style: TextStyle(fontSize: Sizes.size20),
+                  ),
+                ),
               ),
-            ),
+            // dinings가 비어있지 않을 때만 ListView를 보여줍니다.
+            if (dinings.isNotEmpty) ...[
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: dinings.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(dinings[index].placeName),
+                        subtitle: Text(
+                            '${dinings[index].addressName} (${dinings[index].categoryName})'),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 140.0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: Sizes.size10, horizontal: Sizes.size5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        '총 라운드를 선택하세요.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: filteredSizes.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(Sizes.size4),
+                              child: ChoiceChip(
+                                label: Text('${filteredSizes[index]} 강'),
+                                selected: selectedWorldCupSize ==
+                                    filteredSizes[index],
+                                onSelected: (selected) {
+                                  setState(() {
+                                    selectedWorldCupSize = filteredSizes[index];
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GameScreen(
+                                  dinings: dinings,
+                                  worldCupSize: selectedWorldCupSize,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text('시작하기')),
+                    ],
+                  ),
+                ),
+              )
+            ],
           ],
         ),
       ),
