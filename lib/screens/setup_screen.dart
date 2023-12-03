@@ -19,12 +19,6 @@ class _SetupScreenState extends State<SetupScreen> {
   // 기타 필요한 변수들 추가...
 
   @override
-  void initState() {
-    super.initState();
-    print(dinings.length);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -34,23 +28,27 @@ class _SetupScreenState extends State<SetupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // 지도 및 주소 칸
-
             // 탐색 버튼
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
                   // 탐색 버튼 클릭 시의 로직
-                  Navigator.push(
+                  var result = Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const SearchScreen()));
+                  result.then((value) {
+                    if (value != null) {
+                      setState(() {
+                        dinings = value;
+                      });
+                    }
+                  });
                 },
-                child: const Text('탐색'),
+                child: const Text('식당 탐색'),
               ),
             ),
-            // 지도 및 주소 칸 탐색 버튼 클릭 시에 표시할 지도 및 주소 칸
 
             // 월드컵 시작 버튼
             Padding(

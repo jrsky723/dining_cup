@@ -20,6 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String _menu = '';
   bool _isMapLoading = true;
   bool _isMapVisible = true;
+  bool _isSearching = false;
   final List<int> _distances = [100, 300, 500, 1000, 2000, 3000];
   final List<double> _zoomLevels = [15.7, 14.2, 13.5, 12.5, 11.5, 10.9];
   int _distanceIndex = 0;
@@ -51,6 +52,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _searchDinings() async {
+    setState(() {
+      _isSearching = true;
+    });
+
     dinings = await KakaoApi.searchDinings(
       query: _menu,
       longitude: _currentPosition.longitude,
@@ -72,6 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _controller!.clearOverlays();
       _controller!.addOverlayAll(_markers);
       _addCircleOverlay();
+      _isSearching = false;
     });
   }
 
@@ -130,7 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: !_isMapLoading,
+      canPop: !_isMapLoading && !_isSearching,
       onPopInvoked: (didPop) => {
         if (didPop)
           {
@@ -232,7 +238,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            if (!_isMapLoading) {
+                            if (!_isMapLoading && !_isSearching) {
                               Navigator.pop(context, dinings);
                             }
                           },
