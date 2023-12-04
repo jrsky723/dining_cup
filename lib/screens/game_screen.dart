@@ -1,3 +1,4 @@
+import 'package:dining_cup/screens/winner_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dining_cup/models/dining_model.dart';
 
@@ -76,30 +77,23 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            '식당 월드컵 $currentRoundDiningsNumber강 $currentMatchNumber / $totalMatchesInRound'),
+        title: isTournamentEnd
+            ? Text('1st: ${winner.placeName}')
+            : Text(
+                'DINING CUP $currentRoundDiningsNumber강 $currentMatchNumber / $totalMatchesInRound'),
       ),
       body: isTournamentEnd
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    '우승자는',
-                    style: TextStyle(
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    winner.placeName,
-                    style: const TextStyle(
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+          ? FutureBuilder(
+              future: Future.delayed(const Duration(seconds: 2)),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return WinnerScreen(winner: winner);
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             )
           : ListView.builder(
               itemCount: currentMatch.length,
