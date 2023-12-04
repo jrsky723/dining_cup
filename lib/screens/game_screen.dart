@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dining_cup/controllers/game_logic.dart';
 import 'package:dining_cup/screens/winner_screen.dart';
 import 'package:dining_cup/widgets/image_slider.dart';
@@ -8,11 +6,8 @@ import 'package:dining_cup/models/dining_model.dart';
 
 class GameScreen extends StatefulWidget {
   final List<DiningModel> dinings;
-  final int worldCupSize;
 
-  const GameScreen(
-      {Key? key, required this.dinings, required this.worldCupSize})
-      : super(key: key);
+  const GameScreen({Key? key, required this.dinings}) : super(key: key);
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -28,8 +23,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    game =
-        GameLogic(dinings: widget.dinings, worldCupSize: widget.worldCupSize);
+    game = GameLogic(dinings: widget.dinings);
     game.startTournament();
 
     animationController = AnimationController(
@@ -123,7 +117,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   Widget buildDiningSlider(int index, DiningModel dining) {
     final bool isSelected = dining == selectedDining;
-    log('isSelected: $isSelected');
     final bool isTop = index == 0;
     final animation = isSelected ? inAnimation : outAnimation;
 

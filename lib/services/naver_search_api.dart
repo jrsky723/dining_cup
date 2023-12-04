@@ -11,7 +11,7 @@ class NaverSeacrhApi {
   static Future<List<String>> searchDiningImages(String query) async {
     final queryParameters = {
       'query': query,
-      'display': '5',
+      'display': '7',
       'sort': 'sim',
     };
     final headers = {
@@ -29,16 +29,30 @@ class NaverSeacrhApi {
         List<String> imageUrls = [];
         if (results.isNotEmpty) {
           for (var result in results) {
-            imageUrls.add(result['link']);
+            if (await _validateImageUrl(result['thumbnail'])) {
+              imageUrls.add(result['thumbnail']);
+            } else if (await _validateImageUrl(result['link'])) {
+              imageUrls.add(result['link']);
+            }
           }
           return imageUrls;
         } else {
-          log('searchDiningImages failed: ${response.statusCode}');
+          log('$query : 이미지 검색 결과가 없습니다.');
         }
       }
     } catch (e) {
       log('searchDiningImages failed: $e');
     }
     return [];
+  }
+
+  static Future<bool> _validateImageUrl(String url) async {
+    try {
+      final headResponse = await http.head(Uri.parse(url));
+      return headResponse.statusCode == 200;
+    } catch (e) {
+      log('Failed to validate image URL: $url, error: $e');
+      return false;
+    }
   }
 }

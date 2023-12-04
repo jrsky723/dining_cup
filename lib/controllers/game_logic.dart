@@ -9,18 +9,12 @@ class GameLogic {
   int currentRoundDiningsNumber = 0;
   int currentMatchNumber = 0;
   int totalMatchesInRound = 0;
-
-  final int worldCupSize;
   final List<DiningModel> dinings;
 
-  GameLogic({required this.dinings, required this.worldCupSize}) {
-    startTournament();
-  }
+  GameLogic({required this.dinings});
 
   void startTournament() {
     nextRoundDinings = List.from(dinings);
-    nextRoundDinings.shuffle();
-    nextRoundDinings = nextRoundDinings.take(worldCupSize).toList();
     startNextRound();
   }
 
