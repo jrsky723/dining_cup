@@ -203,26 +203,29 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               Visibility(
                   visible: _isMapVisible,
-                  child: SizedBox(
-                    height: 200,
-                    child: FutureBuilder(
-                      future: _positionFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return NaverMap(
-                            options: NaverMapViewOptions(
-                              initialCameraPosition: NCameraPosition(
-                                target: _currentPosition,
-                                zoom: _zoomLevels[_distanceIndex],
+                  child: Flexible(
+                    child: SizedBox(
+                      height: 200,
+                      child: FutureBuilder(
+                        future: _positionFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return NaverMap(
+                              options: NaverMapViewOptions(
+                                initialCameraPosition: NCameraPosition(
+                                  target: _currentPosition,
+                                  zoom: _zoomLevels[_distanceIndex],
+                                ),
                               ),
-                            ),
-                            onMapReady: onMapReady,
-                          );
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      },
+                              onMapReady: onMapReady,
+                            );
+                          } else {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
                     ),
                   )),
               // 주소 검색창
