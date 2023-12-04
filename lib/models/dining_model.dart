@@ -7,6 +7,7 @@ class DiningModel {
       roadAddressName;
   final double longitude, latitude;
   final int distance;
+  List<String> imageUrls = [];
 
   DiningModel.fromJSON(Map<String, dynamic> json)
       : id = json['id'],
@@ -18,5 +19,8 @@ class DiningModel {
         longitude = double.parse(json['x']),
         latitude = double.parse(json['y']),
         distance = int.parse(json['distance']);
-  // distance = json['distance'];
+
+  void setImageUrls(List<String> imageUrls) {
+    this.imageUrls = imageUrls;
+  }
 }
