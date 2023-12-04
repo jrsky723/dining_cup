@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dining_cup/constants/gaps.dart';
 import 'package:dining_cup/constants/sizes.dart';
 import 'package:dining_cup/models/dining_model.dart';
+import 'package:dining_cup/widgets/image_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -33,36 +34,15 @@ class WinnerScreen extends StatelessWidget {
             // 여러 이미지 슬라이더 표시 // flexiable
             Flexible(
               flex: 2,
-              child: winner.imageUrls.isEmpty
-                  ? const Center(
-                      child: Icon(
-                        Icons.no_photography_outlined,
-                        color: Colors.grey,
-                        size: Sizes.size48,
-                      ),
-                    )
-                  : ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: winner.imageUrls.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(Sizes.size8),
-                          child: AspectRatio(
-                            aspectRatio: 1.0,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(Sizes.size8),
-                              child: Image.network(
-                                winner.imageUrls[index],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+              child: ImageSlider(
+                imageUrls: winner.imageUrls,
+              ),
             ),
 
-            // 우승자 정보 표시
+            const Divider(
+              height: 0.0,
+            ),
+
             Flexible(
               flex: 3,
               child: Padding(
