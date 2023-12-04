@@ -99,10 +99,32 @@ class _SetupScreenState extends State<SetupScreen> {
                     shrinkWrap: true,
                     itemCount: dinings.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(dinings[index].placeName),
-                        subtitle: Text(
-                            '${dinings[index].addressName} (${dinings[index].categoryName})'),
+                      return Container(
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(dinings[index].placeName),
+                              Gaps.h10,
+                              Text(
+                                '${dinings[index].distance}m',
+                                style: const TextStyle(
+                                  fontSize: Sizes.size14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(
+                              '${dinings[index].addressName} (${dinings[index].categoryName})'),
+                        ),
                       );
                     },
                   ),

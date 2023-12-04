@@ -6,6 +6,7 @@ class DiningModel {
       placeUrl,
       roadAddressName;
   final double longitude, latitude;
+  final int distance;
 
   DiningModel.fromJSON(Map<String, dynamic> json)
       : id = json['id'],
@@ -15,5 +16,7 @@ class DiningModel {
         placeUrl = json['place_url'],
         roadAddressName = json['road_address_name'],
         longitude = double.parse(json['x']),
-        latitude = double.parse(json['y']);
+        latitude = double.parse(json['y']),
+        distance = int.parse(json['distance']);
+  // distance = json['distance'];
 }
