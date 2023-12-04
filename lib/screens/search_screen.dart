@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:dining_cup/constants/gaps.dart';
 import 'package:dining_cup/models/dining_model.dart';
 import 'package:dining_cup/services/naver_map_api_service.dart';
@@ -36,22 +37,43 @@ class _SearchScreenState extends State<SearchScreen> {
     _positionFuture = _determinePosition();
   }
 
-  Future<void> _determinePosition() async {
-    final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    NLatLng currentLatLng = NLatLng(position.latitude, position.longitude);
-
-    // reverseGeocode() 메서드를 호출하여 위도, 경도를 주소로 변환합니다.
-    String address = await NaverMapApi.reverseGeocode(currentLatLng);
-
-    setState(() {
-      _currentPosition = currentLatLng;
-      _currentAddress = address;
-      _addressController.text = _currentAddress;
-    });
+  Future<void> _requestPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        log('위치 서비스 권한이 거부되었습니다.');
+        return;
+      }
+      if (permission == LocationPermission.deniedForever) {
+        // 권한이 영구적으로 거부된 경우
+        log('위치 서비스 권한이 영구적으로 거부되었습니다. 설정에서 권한을 변경해야 합니다.');
+        return;
+      }
+    }
   }
 
-  Future<void> _searchDinings() async {
+  Future<void> _determinePosition() async {
+    await _requestPermission();
+    try {
+      final position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      NLatLng currentLatLng = NLatLng(position.latitude, position.longitude);
+
+      // reverseGeocode() 메서드를 호출하여 위도, 경도를 주소로 변환합니다.
+      String address = await NaverMapApi.reverseGeocode(currentLatLng);
+
+      setState(() {
+        _currentPosition = currentLatLng;
+        _currentAddress = address;
+        _addressController.text = _currentAddress;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> searchDinings() async {
     setState(() {
       _isSearching = true;
     });
@@ -76,22 +98,22 @@ class _SearchScreenState extends State<SearchScreen> {
       }
       _controller!.clearOverlays();
       _controller!.addOverlayAll(_markers);
-      _addCircleOverlay();
+      addCircleOverlay();
       _isSearching = false;
     });
   }
 
-  void _onMapReady(NaverMapController controller) async {
+  void onMapReady(NaverMapController controller) async {
     setState(() {
       _isMapLoading = false;
     });
     _controller = controller;
     final locationOverlay = await _controller!.getLocationOverlay();
     locationOverlay.setIsVisible(true);
-    _addCircleOverlay();
+    addCircleOverlay();
   }
 
-  void _onSearchIconPressed() async {
+  void onSearchIconPressed() async {
     NLatLng? latLng =
         await NaverMapApi.geocode(_currentAddress, _currentPosition);
     setState(() {
@@ -101,19 +123,19 @@ class _SearchScreenState extends State<SearchScreen> {
       } else {
         _currentPosition = latLng;
       }
-      _updateMapZoomLevel();
+      updateMapZoomLevel();
     });
   }
 
-  void _onSliderChanged(double value) {
+  void onSliderChanged(double value) {
     setState(() {
       _distanceIndex = value.toInt();
       if (_isMapLoading) return;
-      _updateMapZoomLevel();
+      updateMapZoomLevel();
     });
   }
 
-  void _addCircleOverlay() {
+  void addCircleOverlay() {
     _controller!.addOverlay(NCircleOverlay(
       id: 'circle',
       center: _currentPosition,
@@ -124,13 +146,13 @@ class _SearchScreenState extends State<SearchScreen> {
     ));
   }
 
-  void _updateMapZoomLevel() {
+  void updateMapZoomLevel() {
     double newZoomLevel = _zoomLevels[_distanceIndex];
     final cameraUpdate = NCameraUpdate.scrollAndZoomTo(
         target: _currentPosition, zoom: newZoomLevel);
     _controller!.updateCamera(cameraUpdate);
     // 원의 반경을 표시하기 위해 원을 그리는 로직을 추가합니다.
-    _addCircleOverlay();
+    addCircleOverlay();
   }
 
   @override
@@ -171,7 +193,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             IconButton(
               icon: const Icon(Icons.search),
-              onPressed: _onSearchIconPressed,
+              onPressed: onSearchIconPressed,
             ),
           ],
         ),
@@ -194,7 +216,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 zoom: _zoomLevels[_distanceIndex],
                               ),
                             ),
-                            onMapReady: _onMapReady,
+                            onMapReady: onMapReady,
                           );
                         } else {
                           return const Center(
@@ -215,7 +237,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       max: _distances.length.toDouble() - 1,
                       divisions: _distances.length - 1,
                       label: '${_distances[_distanceIndex]}m',
-                      onChanged: _onSliderChanged,
+                      onChanged: onSliderChanged,
                     ),
                     Gaps.v20,
                     TextField(
@@ -233,7 +255,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: _searchDinings, // 검색 버튼 로직 연결
+                          onPressed: searchDinings, // 검색 버튼 로직 연결
                           child: const Text('식당 검색'),
                         ),
                         ElevatedButton(
