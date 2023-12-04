@@ -1,7 +1,6 @@
 import 'package:dining_cup/models/dining_model.dart';
-import 'package:flutter/material.dart';
 
-class GameLogic with ChangeNotifier {
+class GameLogic {
   List<DiningModel> currentRoundDinings = [];
   List<DiningModel> nextRoundDinings = [];
   List<DiningModel> currentMatch = [];
@@ -27,14 +26,10 @@ class GameLogic with ChangeNotifier {
 
   void startNextRound() {
     if (nextRoundDinings.length == 1) {
-      // setState(() {
       winner = nextRoundDinings.first;
       isTournamentEnd = true;
-      // });
-
       return;
     }
-    // setState(() {
     currentRoundDinings = List.from(nextRoundDinings);
     currentRoundDinings.shuffle();
     currentRoundDiningsNumber = currentRoundDinings.length;
@@ -42,7 +37,6 @@ class GameLogic with ChangeNotifier {
     currentMatchNumber = 0;
     totalMatchesInRound = (currentRoundDiningsNumber / 2).ceil();
     prepareNextMatch();
-    // });
   }
 
   void prepareNextMatch() {
