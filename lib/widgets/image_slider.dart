@@ -1,7 +1,7 @@
 import 'package:dining_cup/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
-class ImageSlider extends StatelessWidget {
+class ImageSlider extends StatefulWidget {
   final List<String> imageUrls;
   final VoidCallback? onTap;
 
@@ -12,12 +12,35 @@ class ImageSlider extends StatelessWidget {
   });
 
   @override
+  State<ImageSlider> createState() => _ImageSliderState();
+}
+
+class _ImageSliderState extends State<ImageSlider> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void resetToFirstImage() {
+    _pageController.jumpToPage(0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: AspectRatio(
         aspectRatio: 1.0,
-        child: imageUrls.isEmpty
+        child: widget.imageUrls.isEmpty
             ? Container(
                 color: Colors.grey[200],
                 child: const Center(
@@ -29,13 +52,14 @@ class ImageSlider extends StatelessWidget {
                 ),
               )
             : PageView.builder(
+                controller: _pageController,
                 scrollDirection: Axis.horizontal,
-                itemCount: imageUrls.length,
+                itemCount: widget.imageUrls.length,
                 itemBuilder: (context, index) {
                   return AspectRatio(
                     aspectRatio: 1.0,
                     child: Image.network(
-                      imageUrls[index],
+                      widget.imageUrls[index],
                       fit: BoxFit.cover,
                     ),
                   );

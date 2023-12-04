@@ -1,5 +1,7 @@
+import 'package:dining_cup/constants/gaps.dart';
 import 'package:dining_cup/controllers/game_logic.dart';
 import 'package:dining_cup/screens/winner_screen.dart';
+import 'package:dining_cup/widgets/dining_text.dart';
 import 'package:dining_cup/widgets/image_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:dining_cup/models/dining_model.dart';
@@ -69,10 +71,23 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     return Scaffold(
         backgroundColor: game.isTournamentEnd ? Colors.white : Colors.black,
         appBar: AppBar(
-          title: game.isTournamentEnd
-              ? Text('1st: ${game.winner.placeName}')
-              : Text('DINING CUP ${game.currentRoundDiningsNumber}강 '
-                  '${game.currentMatchNumber} / ${game.totalMatchesInRound}'),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (game.isTournamentEnd) ...[
+                Icon(Icons.emoji_events_rounded, color: Colors.yellow.shade600),
+                Gaps.h5,
+              ],
+              Flexible(
+                child: Text(
+                  game.isTournamentEnd
+                      ? "우승: ${game.winner.placeName}"
+                      : '식당 월드컵 ${game.currentRoundDiningsNumber}강 ${game.currentMatchNumber} / ${game.totalMatchesInRound}',
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
         body: game.isTournamentEnd
             ? FutureBuilder(
@@ -124,9 +139,23 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       flex: 1,
       child: Transform.translate(
         offset: Offset(0.0, animation.value * (isTop ? 1 : -1)),
-        child: ImageSlider(
-          imageUrls: dining.imageUrls,
-          onTap: () => onDiningSelected(dining),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ImageSlider(
+              imageUrls: dining.imageUrls,
+              onTap: () => onDiningSelected(dining),
+            ),
+            IgnorePointer(
+              child: AspectRatio(
+                aspectRatio: 1.0,
+                child: Center(
+                  // 위치 조정
+                  child: DiningText(dining: dining),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
