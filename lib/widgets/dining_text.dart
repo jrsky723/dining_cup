@@ -13,13 +13,13 @@ class DiningText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildTextWithStroke(dining.placeName, 23),
+        _buildTextWithStroke(dining.placeName, 25),
         Gaps.v10,
         _buildTextWithStroke(dining.categoryName, 20),
         Gaps.v10,
         _buildTextWithStroke('거리: ${dining.distance}m', 18),
         Gaps.v10,
-        _buildTextWithStroke(dining.addressName, 20),
+        _buildTextWithStroke(dining.addressName, 18),
       ],
     );
   }

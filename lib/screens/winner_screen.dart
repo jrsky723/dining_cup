@@ -46,8 +46,12 @@ class WinnerScreen extends StatelessWidget {
             Flexible(
               flex: 3,
               child: Padding(
-                padding: const EdgeInsets.all(Sizes.size32),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size32,
+                  vertical: Sizes.size10,
+                ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -57,7 +61,6 @@ class WinnerScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Gaps.v20,
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -74,7 +77,6 @@ class WinnerScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Gaps.v10,
                     Row(
                       children: [
                         const Column(
@@ -101,7 +103,6 @@ class WinnerScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Gaps.v20,
                     const Text(
                       '카테고리',
                       style: TextStyle(
@@ -109,7 +110,6 @@ class WinnerScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Gaps.v10,
                     Row(
                       children: [
                         const Icon(Icons.restaurant),
@@ -117,7 +117,6 @@ class WinnerScreen extends StatelessWidget {
                         Text(winner.categoryName),
                       ],
                     ),
-                    Gaps.v40,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

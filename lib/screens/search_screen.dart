@@ -69,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
         _addressController.text = _currentAddress;
       });
     } catch (e) {
-      print(e);
+      log('위치 서비스를 사용할 수 없습니다: $e');
     }
   }
 
@@ -99,6 +99,9 @@ class _SearchScreenState extends State<SearchScreen> {
       _controller!.clearOverlays();
       _controller!.addOverlayAll(_markers);
       addCircleOverlay();
+    });
+
+    setState(() {
       _isSearching = false;
     });
   }
@@ -258,7 +261,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: searchDinings, // 검색 버튼 로직 연결
+                          onPressed: () {
+                            if (!_isMapLoading && !_isSearching) {
+                              searchDinings();
+                            }
+                          }, // 검색 버튼 로직 연결
                           child: const Text('식당 검색'),
                         ),
                         ElevatedButton(

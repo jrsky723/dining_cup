@@ -168,7 +168,12 @@ class _SetupScreenState extends State<SetupScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(dinings[index].placeName),
+                                  Flexible(
+                                    child: Text(
+                                      dinings[index].placeName,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
                                   Gaps.h10,
                                   Text(
                                     '${dinings[index].distance}m',

@@ -61,6 +61,14 @@ class _ImageSliderState extends State<ImageSlider> {
                     child: Image.network(
                       widget.imageUrls[index],
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Icon(
+                            Icons.error,
+                            color: Colors.grey,
+                          ), // 또는 오류 메시지, 대체 이미지 등을 표시
+                        );
+                      },
                     ),
                   );
                 },
