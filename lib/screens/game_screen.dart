@@ -57,24 +57,27 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   void resetImageSlider() {
     for (var pageController in pageControllers) {
-      pageController.jumpToPage(0);
+      if (pageController.hasClients) {
+        pageController.jumpToPage(0);
+      }
     }
   }
 
   void onDiningSelected(DiningModel selectedDining) {
     this.selectedDining = selectedDining;
+    if (isAnimated) return;
     isAnimated = true;
     animationController.forward().then((_) {
       setState(() {
-        resetImageSlider();
         game.nextRoundDinings.add(selectedDining);
         game.prepareNextMatch();
+        if (game.isTournamentEnd) return;
+        resetImageSlider();
         this.selectedDining = null;
       });
       animationController.reset();
       isAnimated = false;
     });
-    // pageController 출력하기
   }
 
   @override
