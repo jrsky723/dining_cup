@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dining_cup/constants/gaps.dart';
 import 'package:dining_cup/controllers/game_logic.dart';
 import 'package:dining_cup/screens/winner_screen.dart';
@@ -21,6 +23,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late Animation<double> inAnimation, outAnimation;
   DiningModel? selectedDining;
   bool isAnimated = false;
+  List<PageController> pageControllers = [PageController(), PageController()];
 
   @override
   void initState() {
@@ -52,11 +55,18 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     outAnimation.addListener(animationListener);
   }
 
+  void resetImageSlider() {
+    for (var pageController in pageControllers) {
+      pageController.jumpToPage(0);
+    }
+  }
+
   void onDiningSelected(DiningModel selectedDining) {
     this.selectedDining = selectedDining;
     isAnimated = true;
     animationController.forward().then((_) {
       setState(() {
+        resetImageSlider();
         game.nextRoundDinings.add(selectedDining);
         game.prepareNextMatch();
         this.selectedDining = null;
@@ -64,6 +74,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       animationController.reset();
       isAnimated = false;
     });
+    // pageController 출력하기
   }
 
   @override
@@ -145,6 +156,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             ImageSlider(
               imageUrls: dining.imageUrls,
               onTap: () => onDiningSelected(dining),
+              onPageControllerCreated: (controller) {
+                pageControllers[index] = controller;
+              },
             ),
             IgnorePointer(
               child: AspectRatio(

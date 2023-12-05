@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class ImageSlider extends StatefulWidget {
   final List<String> imageUrls;
   final VoidCallback? onTap;
+  final Function(PageController)? onPageControllerCreated;
 
   const ImageSlider({
     super.key,
     required this.imageUrls,
     this.onTap,
+    this.onPageControllerCreated,
   });
 
   @override
@@ -22,16 +24,13 @@ class _ImageSliderState extends State<ImageSlider> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    widget.onPageControllerCreated?.call(_pageController);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
-  }
-
-  void resetToFirstImage() {
-    _pageController.jumpToPage(0);
   }
 
   @override

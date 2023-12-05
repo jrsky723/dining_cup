@@ -40,13 +40,12 @@ class _SetupScreenState extends State<SetupScreen> {
 
   String createQuery(DiningModel dining) {
     String placeName = dining.placeName;
-    // String categoryName = dining.categoryName.replaceAll(' >', '');
-    // String vilage = dining.addressName.split(' ').reversed.toList()[1];
-    // vilage = vilage.substring(0, vilage.length - 1);
+    String categoryName =
+        dining.categoryName.replaceAll(' >', '').replaceAll(',', '');
+    String vilage = dining.addressName.split(' ').reversed.toList()[1];
+    vilage = vilage.substring(0, vilage.length - 1);
 
-    // String query = '$vilage $categoryName $placeName';
-    String query = placeName;
-
+    String query = '$vilage $categoryName $placeName';
     return query;
   }
 
