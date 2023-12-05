@@ -29,11 +29,7 @@ class NaverSeacrhApi {
         List<String> imageUrls = [];
         if (results.isNotEmpty) {
           for (var result in results) {
-            if (await _validateImageUrl(result['thumbnail'])) {
-              imageUrls.add(result['thumbnail']);
-            } else if (await _validateImageUrl(result['link'])) {
-              imageUrls.add(result['link']);
-            }
+            imageUrls.add(result['thumbnail']);
           }
           return imageUrls;
         } else {
@@ -46,13 +42,13 @@ class NaverSeacrhApi {
     return [];
   }
 
-  static Future<bool> _validateImageUrl(String url) async {
-    try {
-      final headResponse = await http.head(Uri.parse(url));
-      return headResponse.statusCode == 200;
-    } catch (e) {
-      log('Failed to validate image URL: $url, error: $e');
-      return false;
-    }
-  }
+  // static Future<bool> _validateImageUrl(String url) async {
+  //   try {
+  //     final headResponse = await http.head(Uri.parse(url));
+  //     return headResponse.statusCode == 200;
+  //   } catch (e) {
+  //     log('Failed to validate image URL: $url, error: $e');
+  //     return false;
+  //   }
+  // }
 }
