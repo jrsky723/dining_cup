@@ -6,6 +6,7 @@
 
 - Flutter를 이용한 식당 이상형 월드컵 (Tournament) 앱.
 - Flutter based restaurant tournament app.
+- 시연 영상 : [Youtube](https://www.youtube.com/watch?v=9cpY5qG6shI)
 
 ## Features
 
@@ -62,16 +63,21 @@ KAKAO_REST_API_KEY="<KAKAO_REST_API_KEY>"
 ## Screenshots
 
 > Start Page
-> ![스크린샷 2023-12-07 042742](https://github.com/jrsky723/dining_cup/assets/67538999/598013c4-9725-4337-aa20-7ecbb609b571)
+
+![스크린샷 2023-12-07 042742](https://github.com/jrsky723/dining_cup/assets/67538999/598013c4-9725-4337-aa20-7ecbb609b571)
 
 > Search Page
-> ![스크린샷 2023-12-07 045531](https://github.com/jrsky723/dining_cup/assets/67538999/35a873af-6e8c-4ee1-9808-9d5030a19f35)
+
+![스크린샷 2023-12-07 045531](https://github.com/jrsky723/dining_cup/assets/67538999/35a873af-6e8c-4ee1-9808-9d5030a19f35)
 
 > Search Result Page
-> ![스크린샷 2023-12-07 053103](https://github.com/jrsky723/dining_cup/assets/67538999/b46aa2c3-7f41-4611-9ef1-b0ac454b819f)
+
+![스크린샷 2023-12-07 053103](https://github.com/jrsky723/dining_cup/assets/67538999/b46aa2c3-7f41-4611-9ef1-b0ac454b819f)
 
 > Tournament Page
-> ![스크린샷 2023-12-07 045439](https://github.com/jrsky723/dining_cup/assets/67538999/11819389-cb13-4a8e-9666-cda01ec5a882)
+
+![스크린샷 2023-12-07 045439](https://github.com/jrsky723/dining_cup/assets/67538999/11819389-cb13-4a8e-9666-cda01ec5a882)
 
 > Winner Page
-> ![스크린샷 2023-12-07 045816](https://github.com/jrsky723/dining_cup/assets/67538999/515089ea-a945-4821-8de6-e45620284811)
+
+![스크린샷 2023-12-07 045816](https://github.com/jrsky723/dining_cup/assets/67538999/515089ea-a945-4821-8de6-e45620284811)
