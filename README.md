@@ -81,3 +81,7 @@ KAKAO_REST_API_KEY="<KAKAO_REST_API_KEY>"
 > Winner Page
 
 ![스크린샷 2023-12-07 045816](https://github.com/jrsky723/dining_cup/assets/67538999/515089ea-a945-4821-8de6-e45620284811)
+
+## References
+
+- [PIKU 이상형 월드컵](https://www.piku.co.kr/)
