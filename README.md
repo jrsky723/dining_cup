@@ -4,8 +4,8 @@
 
 ## Description
 
-- Flutter를 이용한 식당 이상형 월드컵 (Tournament) 앱.
-- Flutter based restaurant tournament app.
+- Flutter를 이용한 식당 이상형 월드컵 (Tournament) Android 앱.
+- Flutter based restaurant tournament Android app.
 - 시연 영상 : [Youtube](https://www.youtube.com/watch?v=9cpY5qG6shI)
 
 ## Features
