@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dining_cup/constants/gaps.dart';
 import 'package:dining_cup/controllers/game_logic.dart';
 import 'package:dining_cup/screens/winner_screen.dart';
