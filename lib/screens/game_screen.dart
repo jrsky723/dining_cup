@@ -93,7 +93,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               Flexible(
                 child: Text(
                   game.isTournamentEnd
-                      ? "우승: ${game.winner.placeName}"
+                      ? "식당 월드컵 우승!"
                       : '식당 월드컵 ${game.currentRoundDiningsNumber}강 ${game.currentMatchNumber} / ${game.totalMatchesInRound}',
                   overflow: TextOverflow.ellipsis,
                 ),
